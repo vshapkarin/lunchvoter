@@ -1,13 +1,13 @@
 package ru.lunchvoter.model;
 
 import org.hibernate.Hibernate;
-import org.springframework.data.domain.Persistable;
+import ru.lunchvoter.HasId;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(value = AccessType.FIELD)
-public class AbstractEntity<T> implements Persistable<T> {
+public class AbstractEntity<T> implements HasId<T> {
 
     @Id
     @GeneratedValue(generator = "id_generator", strategy = GenerationType.IDENTITY)
@@ -25,13 +25,9 @@ public class AbstractEntity<T> implements Persistable<T> {
         return id;
     }
 
+    @Override
     public void setId(T id) {
         this.id = id;
-    }
-
-    @Override
-    public boolean isNew() {
-        return id == null;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package ru.lunchvoter.to;
 
-import ru.lunchvoter.model.AbstractEntity;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -9,7 +7,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class RestaurantTo extends AbstractEntity<Integer> {
+public class RestaurantTo extends AbstractTo {
 
     @NotBlank(groups = RestaurantValidation.class)
     @Size(min = 1, max = 50, groups = RestaurantValidation.class)
@@ -57,6 +55,16 @@ public class RestaurantTo extends AbstractEntity<Integer> {
 
     public void setMenu(Map<String, Integer> menu) {
         this.menu = menu;
+    }
+
+    @Override
+    public String toString() {
+        return "RestaurantTo{" +
+                "name='" + name + '\'' +
+                ", menuDate=" + menuDate +
+                ", menu=" + menu +
+                ", id=" + id +
+                '}';
     }
 
     public interface RestaurantValidation {

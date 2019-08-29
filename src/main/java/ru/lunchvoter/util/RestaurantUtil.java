@@ -1,27 +1,24 @@
 package ru.lunchvoter.util;
 
-import org.springframework.util.Assert;
 import ru.lunchvoter.model.Position;
 import ru.lunchvoter.model.Restaurant;
 import ru.lunchvoter.to.RestaurantTo;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RestaurantUtil {
 
-    public static RestaurantTo getRestaurantTo(Restaurant restaurant) {
-        Set<Position> positions = restaurant.getPositions();
-        Assert.notEmpty(positions, "No menu found for restaurant id = " + restaurant.getId());
+    public static RestaurantTo getTo(Restaurant restaurant, LocalDate menuDate) {
         return new RestaurantTo(restaurant.getId(),
                 restaurant.getName(),
-                positions.iterator().next().getDate(),
-                positions.stream()
+                menuDate,
+                restaurant.getPositions().stream()
                         .collect(Collectors.toMap(Position::getName, Position::getPrice)));
     }
 
-    public static List<RestaurantTo> getRestaurantTos(List<Restaurant> restaurants) {
+    public static List<RestaurantTo> getTos(List<Restaurant> restaurants) {
         return restaurants.stream()
                 .map(res -> new RestaurantTo(res.getId(), res.getName()))
                 .collect(Collectors.toList());
@@ -31,7 +28,7 @@ public class RestaurantUtil {
         return new Restaurant(null, restaurantTo.getName());
     }
 
-    public static Restaurant getOldFromTo(RestaurantTo restaurantTo) {
+    public static Restaurant getFromTo(RestaurantTo restaurantTo) {
         return new Restaurant(restaurantTo.getId(), restaurantTo.getName());
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.lunchvoter.model.Vote;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Repository
 public class VoteRepositoryImpl {
@@ -20,7 +21,7 @@ public class VoteRepositoryImpl {
         return jpaRepository.save(vote);
     }
 
-    public Vote getByUserIdAndDate(int userId, LocalDate date) {
-        return jpaRepository.findByUserIdAndDate(userId, date).orElse(null);
+    public Optional<Vote> getByUserIdAndDate(int userId, LocalDate date) {
+        return jpaRepository.findByUserIdAndDate(userId, date);
     }
 }

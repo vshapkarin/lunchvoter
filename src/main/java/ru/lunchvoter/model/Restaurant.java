@@ -6,7 +6,9 @@ import java.util.Set;
 
 @Entity
 @SequenceGenerator(name = "id_generator", sequenceName = "restaurants_seq", allocationSize = 1, initialValue = Restaurant.START_SEQ)
-@Table(name = "restaurants")
+@Table(name = "restaurants", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name", name = "restaurant_name_idx")
+})
 public class Restaurant extends AbstractEntity<Integer> {
     static final int START_SEQ = 100_000;
 
@@ -45,5 +47,11 @@ public class Restaurant extends AbstractEntity<Integer> {
         this.positions = positions;
     }
 
-    //TODO toString
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

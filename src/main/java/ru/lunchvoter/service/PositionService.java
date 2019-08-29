@@ -22,7 +22,6 @@ public class PositionService {
 
     @Transactional
     public void update(Restaurant restaurant, LocalDate date, Map<String, Integer> menu) {
-        //noinspection ConstantConditions
         repository.deleteByRestaurantIdAndDate(restaurant.getId(), date);
         repository.save(PositionUtil.getPositions(restaurant, date, menu));
     }

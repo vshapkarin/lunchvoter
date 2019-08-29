@@ -6,10 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -37,6 +34,7 @@ public class User extends AbstractEntity<Integer> {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "registered", nullable = false, updatable = false, columnDefinition = "timestamp default now()")
@@ -59,9 +57,10 @@ public class User extends AbstractEntity<Integer> {
     public User() {
     }
 
-    public User(Integer id, String email, String password, Date registered, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
         super(id);
         this.email = email;
+        this.name = name;
         this.password = password;
         this.registered = registered;
         setRoles(roles);
@@ -107,5 +106,15 @@ public class User extends AbstractEntity<Integer> {
         return roles;
     }
 
-    //TODO toString
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", registered=" + registered +
+                ", roles=" + roles +
+                ", id=" + id +
+                '}';
+    }
 }

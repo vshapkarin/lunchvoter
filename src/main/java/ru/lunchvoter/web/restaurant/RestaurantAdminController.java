@@ -1,5 +1,7 @@
 package ru.lunchvoter.web.restaurant;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.lunchvoter.model.Restaurant;
-import ru.lunchvoter.repository.position.PositionRepositoryImpl;
 import ru.lunchvoter.repository.restaurant.RestaurantRepositoryImpl;
 import ru.lunchvoter.service.PositionService;
 import ru.lunchvoter.to.RestaurantTo;
@@ -26,17 +27,15 @@ public class RestaurantAdminController {
 
     public static final String REST_URL = "/admin/restaurants";
 
-    private final PositionRepositoryImpl positionRepository;
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     private final RestaurantRepositoryImpl restaurantRepository;
 
     private final PositionService positionService;
 
     @Autowired
-    public RestaurantAdminController(PositionRepositoryImpl positionRepository,
-                                     RestaurantRepositoryImpl restaurantRepository,
+    public RestaurantAdminController(RestaurantRepositoryImpl restaurantRepository,
                                      PositionService positionService) {
-        this.positionRepository = positionRepository;
         this.restaurantRepository = restaurantRepository;
         this.positionService = positionService;
     }
@@ -44,6 +43,7 @@ public class RestaurantAdminController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(
             @Validated(RestaurantTo.RestaurantValidation.class) @RequestBody RestaurantTo restaurantTo) {
+        log.info("create new {}", restaurantTo);
         ValidationUtil.checkNew(restaurantTo);
         Restaurant created = restaurantRepository.save(RestaurantUtil.getNewFromTo(restaurantTo));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -55,6 +55,7 @@ public class RestaurantAdminController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
+        log.info("delete restaurant with id = {}", id);
         Assert.isTrue(restaurantRepository.delete(id), "Restaurant with id = " + id + " doesn't exist");
     }
 
@@ -62,15 +63,17 @@ public class RestaurantAdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Validated(RestaurantTo.RestaurantValidation.class) @RequestBody RestaurantTo restaurantTo,
                        @PathVariable int id) {
+        log.info("update {} with id = {}", restaurantTo, id);
         ValidationUtil.assureIdConsistent(restaurantTo, id);
-        restaurantRepository.save(RestaurantUtil.getOldFromTo(restaurantTo));
+        restaurantRepository.save(RestaurantUtil.getFromTo(restaurantTo));
     }
 
     @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateMenu(@Validated(RestaurantTo.MenuValidation.class) @RequestBody RestaurantTo restaurantTo,
                            @PathVariable int id) {
+        log.info("update menu in {} with id = {}", restaurantTo, id);
         ValidationUtil.assureIdConsistent(restaurantTo, id);
-        positionService.update(RestaurantUtil.getOldFromTo(restaurantTo), restaurantTo.getMenuDate(), restaurantTo.getMenu());
+        positionService.update(RestaurantUtil.getFromTo(restaurantTo), restaurantTo.getMenuDate(), restaurantTo.getMenu());
     }
 }

@@ -14,10 +14,10 @@ INSERT INTO restaurants (name) VALUES
     ('KFC');
 
 INSERT INTO users (name, email, password) VALUES
-    ('John', 'johnycowboy@email.com', 'password'),
-    ('Bob', 'builderbob@email.com', 'password'),
-    ('Christine', 'chrstn@email.com', 'password'),
-    ('Admin', 'admin@email.com', 'admin');
+    ('John', 'johnycowboy@email.com', '{noop}password'),
+    ('Bob', 'builderbob@email.com', '{noop}password'),
+    ('Christine', 'chrstn@email.com', '{noop}password'),
+    ('Admin', 'admin@email.com', '{noop}admin');
 
 INSERT INTO user_roles (user_id, role) VALUES
 (100000, 'ROLE_USER'),

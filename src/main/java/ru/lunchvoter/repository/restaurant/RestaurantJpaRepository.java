@@ -18,6 +18,6 @@ public interface RestaurantJpaRepository extends JpaRepository<Restaurant, Integ
     @Query("DELETE FROM Restaurant r WHERE r.id=:id")
     int delete(@Param("id") int id);
 
-    @Query("SELECT r FROM Restaurant r JOIN FETCH r.positions p WHERE r.id=:id AND p.date=:date")
+    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH r.positions p WHERE r.id=:id AND p.date=:date OR p.date IS NULL")
     Optional<Restaurant> getWithPositionsByDate(@Param("id") int id, @Param("date") LocalDate date);
 }

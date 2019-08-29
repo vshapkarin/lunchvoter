@@ -1,14 +1,15 @@
 package ru.lunchvoter.web.user;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.lunchvoter.model.User;
-import ru.lunchvoter.repository.user.UserRepositoryImpl;
+import ru.lunchvoter.service.UserService;
 import ru.lunchvoter.util.ValidationUtil;
 
 import javax.validation.Valid;
@@ -21,34 +22,38 @@ public class AdminController {
 
     public static final String REST_URL = "/admin/users";
 
-    private final UserRepositoryImpl repository;
+    private Logger log = LoggerFactory.getLogger(getClass());
+
+    private final UserService service;
 
     @Autowired
-    public AdminController(UserRepositoryImpl repository) {
-        this.repository = repository;
+    public AdminController(UserService service) {
+        this.service = service;
     }
 
     @GetMapping
     public List<User> getAll() {
-        return repository.getAll();
+        log.info("get all");
+        return service.getAll();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public User get(@PathVariable int id) {
-        return repository.get(id)
-                .orElseThrow(() -> new IllegalArgumentException("Not found user with id = " + id));
+        log.info("get user with id = {}", id);
+        return service.get(id);
     }
 
     @GetMapping(value = "/by", produces = MediaType.APPLICATION_JSON_VALUE)
     public User getByEmail(@RequestParam String email) {
-        return repository.getByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Not found user with email = " + email));
+        log.info("get user by {}", email);
+        return service.getByEmail(email);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
+        log.info("create new {}", user);
         ValidationUtil.checkNew(user);
-        User created = repository.save(user);
+        User created = service.save(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -59,13 +64,15 @@ public class AdminController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        Assert.isTrue(repository.delete(id), "User with id = " + id + " doesn't exist");
+        log.info("delete user with id = {}", id);
+        service.delete(id);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody User user, @PathVariable int id) {
+        log.info("update {} with id = {}", user, id);
         ValidationUtil.assureIdConsistent(user, id);
-        repository.save(user);
+        service.save(user);
     }
 }
