@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
-public class VoteRepositoryImpl {
+public class VoteRepositoryImpl implements VoteRepository {
 
     private final VoteJpaRepository jpaRepository;
 
@@ -17,10 +17,12 @@ public class VoteRepositoryImpl {
         this.jpaRepository = jpaRepository;
     }
 
+    @Override
     public Vote save(Vote vote) {
         return jpaRepository.save(vote);
     }
 
+    @Override
     public Optional<Vote> getByUserIdAndDate(int userId, LocalDate date) {
         return jpaRepository.findByUserIdAndDate(userId, date);
     }

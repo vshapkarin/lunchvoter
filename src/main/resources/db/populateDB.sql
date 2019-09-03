@@ -8,16 +8,16 @@ ALTER SEQUENCE votes_seq            RESTART WITH 1000000;
 ALTER SEQUENCE restaurants_seq      RESTART WITH 100000;
 
 INSERT INTO restaurants (name) VALUES
-    ('elBulli'),
-    ('The Fat Duck'),
-    ('Pierre Gagnaire'),
-    ('KFC');
+    ('DoubleB'),
+    ('floo'),
+    ('Cezve'),
+    ('Surf Coffee');
 
 INSERT INTO users (name, email, password) VALUES
-    ('John', 'johnycowboy@email.com', '{noop}password'),
-    ('Bob', 'builderbob@email.com', '{noop}password'),
-    ('Christine', 'chrstn@email.com', '{noop}password'),
-    ('Admin', 'admin@email.com', '{noop}admin');
+    ('John',      'johnycowboy@email.com',  '{noop}password'),
+    ('Bob',       'builderbob@email.com',   '{noop}password'),
+    ('Christine', 'chrstn@email.com',       '{noop}password'),
+    ('Admin',     'admin@email.com',        '{noop}admin');
 
 INSERT INTO user_roles (user_id, role) VALUES
 (100000, 'ROLE_USER'),
@@ -27,19 +27,19 @@ INSERT INTO user_roles (user_id, role) VALUES
 (100003, 'ROLE_ADMIN');
 
 INSERT INTO menu_positions (name, price, restaurant_id, date) VALUES
-    ('Lobster gazpacho',        25000, 100000, current_date),
-    ('Espuma de humo',          20000, 100000, current_date),
-    ('Spherical melon caviar',  17000, 100000, current_date),
-    ('The Mock Turtle soup',    15000, 100001, current_date),
-    ('Mad tea',                 11000, 100001, current_date),
-    ('Langoustine',             29000, 100002, current_date),
-    ('Palamos',                 26500, 100002, current_date),
-    ('Cocktail de poche',       9000,  100002, current_date),
-    ('Basket',                  850,   100003, current_date),
-    ('Spicy bites',             230,   100003, current_date),
-    ('Twister original',        250,   100003, current_date),
-    ('Chiefburger',             199,   100003, current_date),
-    ('Coca-cola',               99,    100003, current_date);
+    ('Cappuccino',           500, 100000, current_date),
+    ('Hario V60',            300, 100000, current_date),
+    ('Almond croissant',     200, 100000, current_date),
+    ('Latte',                400, 100001, current_date),
+    ('Chemex',               200, 100001, current_date),
+    ('Espresso',             300, 100002, current_date),
+    ('Aeropress',            250, 100002, current_date),
+    ('Creamy croissant',     275, 100002, current_date),
+    ('Flat white',           450, 100003, current_date),
+    ('Mokka',                550, 100003, current_date),
+    ('Australian lungo',     300, 100003, current_date),
+    ('Omelette',             230, 100003, current_date),
+    ('Chicken sandwich',     250, 100003, current_date);
 
 INSERT INTO votes (user_id, restaurant_id, date) VALUES
     (100000, 100003, current_date);

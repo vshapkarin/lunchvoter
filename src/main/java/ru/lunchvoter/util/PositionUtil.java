@@ -11,7 +11,7 @@ public class PositionUtil {
 
     public static Iterable<Position> getPositions(Restaurant restaurant, LocalDate date, Map<String, Integer> menu) {
         return menu.entrySet().stream()
-                .map(pos -> new Position(date, pos.getKey(), pos.getValue(), restaurant))
+                .map(pos -> new Position(null, date, pos.getKey(), pos.getValue(), restaurant))
                 .collect(Collectors.toList());
     }
 }

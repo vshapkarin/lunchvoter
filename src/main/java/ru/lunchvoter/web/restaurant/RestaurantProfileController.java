@@ -10,10 +10,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.lunchvoter.AuthorizedUser;
 import ru.lunchvoter.model.Vote;
-import ru.lunchvoter.repository.restaurant.RestaurantRepositoryImpl;
+import ru.lunchvoter.repository.restaurant.RestaurantRepository;
 import ru.lunchvoter.service.VoteService;
 import ru.lunchvoter.to.RestaurantTo;
 import ru.lunchvoter.util.RestaurantUtil;
+import ru.lunchvoter.util.TimeUtil;
 import ru.lunchvoter.util.VoteWrapper;
 
 import java.time.LocalDate;
@@ -31,12 +32,12 @@ public class RestaurantProfileController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    private final RestaurantRepositoryImpl restaurantRepository;
+    private final RestaurantRepository restaurantRepository;
 
     private final VoteService voteService;
 
     @Autowired
-    public RestaurantProfileController(RestaurantRepositoryImpl restaurantRepository, VoteService voteService) {
+    public RestaurantProfileController(RestaurantRepository restaurantRepository, VoteService voteService) {
         this.restaurantRepository = restaurantRepository;
         this.voteService = voteService;
     }
@@ -57,7 +58,7 @@ public class RestaurantProfileController {
     @PostMapping("/{id}")
     public ResponseEntity<Vote> vote(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("{} votes for restaurant with id = {}", authUser, id);
-        VoteWrapper vote = voteService.vote(authUser.getId(), id, MENU_DATE);
+        VoteWrapper vote = voteService.vote(authUser.getId(), id, MENU_DATE, TimeUtil.CHANGE_MIND_TIME);
         if(vote.isOld()) {
             return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).allow(HttpMethod.GET).body(vote.getVote());
         }

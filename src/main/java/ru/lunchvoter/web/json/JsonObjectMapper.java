@@ -10,7 +10,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JsonObjectMapper extends ObjectMapper {
 
-    public JsonObjectMapper() {
+    private static final ObjectMapper MAPPER = new JsonObjectMapper();
+
+    private JsonObjectMapper() {
         registerModule(new Hibernate5Module());
 
         registerModule(new JavaTimeModule());
@@ -19,5 +21,9 @@ public class JsonObjectMapper extends ObjectMapper {
         setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
+
+    public static ObjectMapper getMapper() {
+        return MAPPER;
     }
 }

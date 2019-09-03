@@ -2,8 +2,6 @@ package ru.lunchvoter.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import static ru.lunchvoter.util.exception.ErrorType.*;
 
 @RestControllerAdvice(annotations = RestController.class)
-@Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 

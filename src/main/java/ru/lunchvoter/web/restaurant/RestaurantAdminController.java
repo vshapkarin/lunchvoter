@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.lunchvoter.model.Restaurant;
-import ru.lunchvoter.repository.restaurant.RestaurantRepositoryImpl;
+import ru.lunchvoter.repository.restaurant.RestaurantRepository;
 import ru.lunchvoter.service.PositionService;
 import ru.lunchvoter.to.RestaurantTo;
 import ru.lunchvoter.util.RestaurantUtil;
@@ -29,12 +29,12 @@ public class RestaurantAdminController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    private final RestaurantRepositoryImpl restaurantRepository;
+    private final RestaurantRepository restaurantRepository;
 
     private final PositionService positionService;
 
     @Autowired
-    public RestaurantAdminController(RestaurantRepositoryImpl restaurantRepository,
+    public RestaurantAdminController(RestaurantRepository restaurantRepository,
                                      PositionService positionService) {
         this.restaurantRepository = restaurantRepository;
         this.positionService = positionService;

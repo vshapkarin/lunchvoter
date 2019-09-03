@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Objects;
 
 public class RestaurantTo extends AbstractTo {
 
@@ -55,6 +56,22 @@ public class RestaurantTo extends AbstractTo {
 
     public void setMenu(Map<String, Integer> menu) {
         this.menu = menu;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RestaurantTo that = (RestaurantTo) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(menuDate, that.menuDate) &&
+                Objects.equals(menu, that.menu);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, menuDate, menu);
     }
 
     @Override

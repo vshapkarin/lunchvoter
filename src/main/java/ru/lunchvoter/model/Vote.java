@@ -10,7 +10,7 @@ import java.time.LocalDate;
         @Index(columnList = "user_id, date", name = "votes_unique_user_date_idx", unique = true)
 })
 public class Vote extends AbstractEntity<Long> {
-    static final int START_SEQ = 1_000_000;
+    public static final int START_SEQ = 1_000_000;
 
     @Column(name = "user_id", nullable = false)
     @NotNull

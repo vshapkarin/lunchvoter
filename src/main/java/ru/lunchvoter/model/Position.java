@@ -1,6 +1,9 @@
 package ru.lunchvoter.model;
 
 
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,8 +15,9 @@ import java.time.LocalDate;
 @Table(name = "menu_positions", indexes = {
         @Index(columnList = "date, restaurant_id", name = "menu_positions_idx")
 })
+@FilterDef(name = "filterByDate", parameters = @ParamDef(name = "date", type = "java.time.LocalDate"))
 public class Position extends AbstractEntity<Long> {
-    static final int START_SEQ = 1_000_000;
+    public static final int START_SEQ = 1_000_000;
 
     @Column(name = "date", nullable = false)
     @NotNull
@@ -36,7 +40,8 @@ public class Position extends AbstractEntity<Long> {
     public Position() {
     }
 
-    public Position(LocalDate date, String name, Integer price, Restaurant restaurant) {
+    public Position(Long id, LocalDate date, String name, Integer price, Restaurant restaurant) {
+        super(id);
         this.date = date;
         this.name = name;
         this.price = price;

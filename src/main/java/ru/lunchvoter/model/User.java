@@ -57,6 +57,14 @@ public class User extends AbstractEntity<Integer> {
     public User() {
     }
 
+    public User(User user) {
+        this(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRegistered(), user.getRoles());
+    }
+
+    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
+        this(id, name, email, password, new Date(), EnumSet.of(role, roles));
+    }
+
     public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
         super(id);
         this.email = email;

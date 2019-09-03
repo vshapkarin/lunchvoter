@@ -11,5 +11,5 @@ public interface PositionJpaRepository extends JpaRepository<Position, Long> {
 
     @Transactional
     @Modifying
-    void deleteByRestaurantIdAndDate(int restaurantId, LocalDate date);
+    int deleteByRestaurantIdAndDate(int restaurantId, LocalDate date);
 }

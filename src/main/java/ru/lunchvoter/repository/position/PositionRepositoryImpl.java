@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public class PositionRepositoryImpl {
+public class PositionRepositoryImpl implements PositionRepository {
 
     private final PositionJpaRepository jpaRepository;
 
@@ -17,11 +17,13 @@ public class PositionRepositoryImpl {
         this.jpaRepository = jpaRepository;
     }
 
+    @Override
     public List<Position> save(Iterable<Position> positions) {
         return jpaRepository.saveAll(positions);
     }
 
-    public void deleteByRestaurantIdAndDate(int restaurantId, LocalDate date) {
-        jpaRepository.deleteByRestaurantIdAndDate(restaurantId, date);
+    @Override
+    public boolean deleteByRestaurantIdAndDate(int restaurantId, LocalDate date) {
+        return jpaRepository.deleteByRestaurantIdAndDate(restaurantId, date) != 0;
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.lunchvoter.AuthorizedUser;
 import ru.lunchvoter.model.User;
-import ru.lunchvoter.repository.user.UserRepositoryImpl;
+import ru.lunchvoter.repository.user.UserRepository;
 import ru.lunchvoter.to.UserTo;
 import ru.lunchvoter.util.UserUtil;
 
@@ -22,12 +22,12 @@ import java.util.List;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
 
-    private final UserRepositoryImpl repository;
+    private final UserRepository repository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepositoryImpl repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
