@@ -50,9 +50,8 @@ public class User extends AbstractEntity<Integer> {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "votes", joinColumns = @JoinColumn(name = "user_id"))
-    Set<Long> votes;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Vote> votes;
 
     public User() {
     }
@@ -112,6 +111,14 @@ public class User extends AbstractEntity<Integer> {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
     }
 
     @Override

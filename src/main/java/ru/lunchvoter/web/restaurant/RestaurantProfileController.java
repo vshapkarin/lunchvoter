@@ -58,7 +58,7 @@ public class RestaurantProfileController {
     @PostMapping("/{id}")
     public ResponseEntity<Vote> vote(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("{} votes for restaurant with id = {}", authUser, id);
-        VoteWrapper vote = voteService.vote(authUser.getId(), id, MENU_DATE, TimeUtil.CHANGE_MIND_TIME);
+        VoteWrapper vote = voteService.vote(authUser.getUser(), id, MENU_DATE, TimeUtil.CHANGE_MIND_TIME);
         if(vote.isOld()) {
             return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).allow(HttpMethod.GET).body(vote.getVote());
         }

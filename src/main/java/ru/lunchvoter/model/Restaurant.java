@@ -28,9 +28,8 @@ public class Restaurant extends AbstractEntity<Integer> {
     @Filter(name = "filterByDate", condition = "date = :date")
     private Set<Position> positions;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "votes", joinColumns = @JoinColumn(name = "restaurant_id"))
-    private Set<Long> voteIds;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    private Set<Vote> votes;
 
     public Restaurant() {
     }
@@ -58,6 +57,14 @@ public class Restaurant extends AbstractEntity<Integer> {
 
     public void setPositions(Set<Position> positions) {
         this.positions = positions;
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
     }
 
     @Override

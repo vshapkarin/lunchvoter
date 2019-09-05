@@ -12,13 +12,15 @@ import java.time.LocalDate;
 public class Vote extends AbstractEntity<Long> {
     public static final int START_SEQ = 1_000_000;
 
-    @Column(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
     @NotNull
-    private int userId;
+    private User user;
 
-    @Column(name = "restaurant_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
-    private int restaurantId;
+    private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)
     @NotNull
@@ -27,31 +29,31 @@ public class Vote extends AbstractEntity<Long> {
     public Vote() {
     }
 
-    public Vote(int userId, int restaurantId, LocalDate date) {
-        this(null, userId, restaurantId, date);
+    public Vote(User user, Restaurant restaurant, LocalDate date) {
+        this(null, user, restaurant, date);
     }
 
-    public Vote(Long id, int userId, int restaurantId, LocalDate date) {
+    public Vote(Long id, User user, Restaurant restaurant, LocalDate date) {
         super(id);
-        this.userId = userId;
-        this.restaurantId = restaurantId;
+        this.user = user;
+        this.restaurant = restaurant;
         this.date = date;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getRestaurantId() {
-        return restaurantId;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantId(int restaurantId) {
-        this.restaurantId = restaurantId;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public LocalDate getDate() {

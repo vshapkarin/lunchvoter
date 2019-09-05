@@ -10,7 +10,7 @@ import ru.lunchvoter.util.VoteWrapper;
 
 import java.time.LocalTime;
 
-import static ru.lunchvoter.data.UserTestData.USER_ID;
+import static ru.lunchvoter.data.UserTestData.*;
 import static ru.lunchvoter.data.VoteTestData.*;
 
 class VoteServiceTest extends AbstractServiceAndRepositoryTest {
@@ -24,21 +24,21 @@ class VoteServiceTest extends AbstractServiceAndRepositoryTest {
 
     @Test
     void vote() {
-        VoteWrapper saved = service.vote(USER_ID + 1, RestaurantTestData.RESTAURANT_ID, DATE, TimeUtil.CHANGE_MIND_TIME);
+        VoteWrapper saved = service.vote(USER2, RestaurantTestData.RESTAURANT_ID, DATE, TimeUtil.CHANGE_MIND_TIME);
         Assertions.assertThat(saved.isOld()).isEqualTo(false);
         assertMatch(saved.getVote(), NEW_VOTE2);
     }
 
     @Test
     void voteAgainBeforeChangeMindTime() {
-        VoteWrapper saved = service.vote(USER_ID, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MAX);
+        VoteWrapper saved = service.vote(USER1, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MAX);
         Assertions.assertThat(saved.isOld()).isEqualTo(false);
         assertMatch(saved.getVote(), NEW_VOTE1);
     }
 
     @Test
     void voteAgainAfterChangeMindTime() {
-        VoteWrapper saved = service.vote(USER_ID, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MIN);
+        VoteWrapper saved = service.vote(USER1, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MIN);
         Assertions.assertThat(saved.isOld()).isEqualTo(true);
         assertMatch(saved.getVote(), OLD_VOTE);
     }
@@ -46,7 +46,7 @@ class VoteServiceTest extends AbstractServiceAndRepositoryTest {
     @Test
     void voteWrongRestaurant() {
         validateRootCause(
-                () -> service.vote(USER_ID + 1, 0, DATE, TimeUtil.CHANGE_MIND_TIME),
+                () -> service.vote(USER2, 0, DATE, TimeUtil.CHANGE_MIND_TIME),
                 IllegalArgumentException.class);
     }
 }

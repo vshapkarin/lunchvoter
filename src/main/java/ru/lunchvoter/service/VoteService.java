@@ -3,6 +3,8 @@ package ru.lunchvoter.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.lunchvoter.model.Restaurant;
+import ru.lunchvoter.model.User;
 import ru.lunchvoter.model.Vote;
 import ru.lunchvoter.repository.restaurant.RestaurantRepository;
 import ru.lunchvoter.repository.vote.VoteRepository;
@@ -26,12 +28,12 @@ public class VoteService {
     }
 
     @Transactional
-    public VoteWrapper vote(int userId, int restaurantId, LocalDate voteDate, LocalTime changeMindTime) {
-        restaurantRepository.get(restaurantId)
+    public VoteWrapper vote(User user, int restaurantId, LocalDate voteDate, LocalTime changeMindTime) {
+        Restaurant restaurant = restaurantRepository.get(restaurantId)
                 .orElseThrow(() -> new IllegalArgumentException(ValidationUtil.getWrongRestaurantMessage(restaurantId)));
 
-        Vote oldVote = voteRepository.getByUserIdAndDate(userId, voteDate).orElse(null);
-        Vote newVote = new Vote(userId, restaurantId, voteDate);
+        Vote oldVote = voteRepository.getByUserIdAndDate(user.getId(), voteDate).orElse(null);
+        Vote newVote = new Vote(user, restaurant, voteDate);
         if (oldVote != null) {
             if(LocalTime.now().compareTo(changeMindTime) > 0) {
                 return new VoteWrapper(oldVote, true);
