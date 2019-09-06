@@ -10,7 +10,8 @@ import ru.lunchvoter.util.VoteWrapper;
 
 import java.time.LocalTime;
 
-import static ru.lunchvoter.data.UserTestData.*;
+import static ru.lunchvoter.data.UserTestData.USER1;
+import static ru.lunchvoter.data.UserTestData.USER2;
 import static ru.lunchvoter.data.VoteTestData.*;
 
 class VoteServiceTest extends AbstractServiceAndRepositoryTest {

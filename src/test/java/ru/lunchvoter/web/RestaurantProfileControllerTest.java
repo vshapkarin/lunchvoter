@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.lunchvoter.data.PositionTestData;
 import ru.lunchvoter.data.VoteTestData;
 import ru.lunchvoter.model.Restaurant;
 import ru.lunchvoter.repository.vote.VoteRepository;
@@ -18,7 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.lunchvoter.TestUtil.userHttpBasic;
-import static ru.lunchvoter.data.PositionTestData.*;
+import static ru.lunchvoter.data.PositionTestData.DATE;
+import static ru.lunchvoter.data.RestaurantTestData.contentJson;
 import static ru.lunchvoter.data.RestaurantTestData.*;
 import static ru.lunchvoter.data.UserTestData.*;
 import static ru.lunchvoter.data.VoteTestData.NEW_VOTE2;
@@ -49,7 +51,7 @@ class RestaurantProfileControllerTest extends AbstractControllerTest {
     @Test
     void getWithPositions() throws Exception {
         Restaurant restaurant = new Restaurant(RESTAURANT1);
-        restaurant.setPositions(Set.of(POSITION1, POSITION2, POSITION3));
+        restaurant.setPositions(Set.of(PositionTestData.POSITION1, PositionTestData.POSITION2, PositionTestData.POSITION3));
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT_ID)
                 .with(userHttpBasic(USER1)))
                 .andDo(print())
