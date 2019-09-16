@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
 
-public class RestaurantTo extends AbstractTo {
+public class RestaurantTo extends AbstractTo<Integer> {
 
     @NotBlank(groups = RestaurantValidation.class)
     @Size(min = 1, max = 50, groups = RestaurantValidation.class)

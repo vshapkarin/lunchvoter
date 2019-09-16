@@ -6,7 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UserTo extends AbstractTo {
+public class UserTo extends AbstractTo<Integer> {
 
     @NotBlank
     @Size(max = 100)

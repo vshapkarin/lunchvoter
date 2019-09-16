@@ -45,6 +45,10 @@ public class RestaurantTestData {
         assertThat(actual).usingElementComparatorIgnoringFields("menuDate", "menu").isEqualTo(expected);
     }
 
+    public static ResultMatcher contentJson(Restaurant expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, Restaurant.class), expected);
+    }
+
     public static ResultMatcher contentJson(List<RestaurantTo> expected) {
         return result -> assertMatchTos(readListFromJsonMvcResult(result, RestaurantTo.class), expected);
     }

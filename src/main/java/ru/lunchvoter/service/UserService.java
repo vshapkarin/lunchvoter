@@ -9,12 +9,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import ru.lunchvoter.AuthorizedUser;
 import ru.lunchvoter.model.User;
-import ru.lunchvoter.repository.user.UserRepository;
+import ru.lunchvoter.repository.user.UserJpaRepository;
 import ru.lunchvoter.to.UserTo;
 import ru.lunchvoter.util.UserUtil;
+import ru.lunchvoter.util.exception.NotFoundException;
 
 import java.util.List;
 
@@ -22,12 +22,12 @@ import java.util.List;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
 
-    private final UserRepository repository;
+    private final UserJpaRepository repository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserJpaRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -43,26 +43,28 @@ public class UserService implements UserDetailsService {
     }
 
     public void delete(int id) {
-        Assert.isTrue(repository.delete(id), "User with id = " + id + " doesn't exist");
+        if (repository.delete(id) == 0) {
+            throw new NotFoundException("User with id = " + id + " doesn't exist");
+        }
     }
 
     public User get(int id) {
-        return repository.get(id)
-                .orElseThrow(() -> new IllegalArgumentException("Not found user with id = " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not found user with id = " + id));
     }
 
     public User getByEmail(String email) {
-        return repository.getByEmail(email.toLowerCase())
-                .orElseThrow(() -> new IllegalArgumentException("Not found user with email = " + email));
+        return repository.findByEmail(email.toLowerCase())
+                .orElseThrow(() -> new NotFoundException("Not found user with email = " + email));
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.findAll();
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = repository.getByEmail(email).orElseThrow(() ->
+        User user = repository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("User with email " + email + " is not found"));
         return new AuthorizedUser(user);
     }

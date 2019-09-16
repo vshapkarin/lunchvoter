@@ -8,8 +8,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.lunchvoter.data.PositionTestData;
 import ru.lunchvoter.model.Restaurant;
-import ru.lunchvoter.repository.restaurant.RestaurantRepository;
+import ru.lunchvoter.repository.restaurant.RestaurantRepositoryImpl;
 import ru.lunchvoter.to.RestaurantTo;
 import ru.lunchvoter.util.RestaurantUtil;
 import ru.lunchvoter.util.exception.ErrorType;
@@ -19,6 +20,7 @@ import ru.lunchvoter.web.restaurant.RestaurantAdminController;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.lunchvoter.TestUtil.readFromJson;
 import static ru.lunchvoter.TestUtil.userHttpBasic;
@@ -33,7 +35,28 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
     private static final String REST_URL = RestaurantAdminController.REST_URL + '/';
 
     @Autowired
-    private RestaurantRepository repository;
+    private RestaurantRepositoryImpl repository;
+
+    @Test
+    void getByDate() throws Exception {
+        Restaurant restaurant = new Restaurant(RESTAURANT1);
+        restaurant.setPositions(Set.of(PositionTestData.POSITION1, PositionTestData.POSITION2, PositionTestData.POSITION3));
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT_ID + "?date=" + DATE)
+        .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(restaurant));
+    }
+
+    @Test
+    void getByDateNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 0 + "?date=" + DATE)
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.DATA_NOT_FOUND));
+    }
 
     @Test
     void createWithLocation() throws Exception {
@@ -137,7 +160,7 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
         updatedTo.setMenuDate(DATE);
         updatedTo.setMenu(getMenu());
 
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT_ID)
+        mockMvc.perform(MockMvcRequestBuilders.patch(REST_URL + RESTAURANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updatedTo)))
@@ -152,7 +175,7 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
     void updateMenuInvalid() throws Exception {
         RestaurantTo updatedTo = new RestaurantTo();
 
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT_ID)
+        mockMvc.perform(MockMvcRequestBuilders.patch(REST_URL + RESTAURANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updatedTo)))
@@ -167,7 +190,7 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
         updatedTo.setMenuDate(DATE);
         updatedTo.setMenu(getMenu());
 
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + 0)
+        mockMvc.perform(MockMvcRequestBuilders.patch(REST_URL + 0)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updatedTo)))

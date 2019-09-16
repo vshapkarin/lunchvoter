@@ -7,7 +7,7 @@
 
     <bean class="ru.lunchvoter.web.json.JsonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <mvc:annotation-driven>
+    <mvc:annotation-driven conversion-service="conversionService">
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
@@ -19,6 +19,14 @@
             <bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver "/>
         </mvc:argument-resolvers>
     </mvc:annotation-driven>
+
+    <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" id="conversionService">
+        <property name="formatters">
+            <set>
+                <bean class="ru.lunchvoter.web.converter.DateFormatter"/>
+            </set>
+        </property>
+    </bean>
 
     <context:component-scan base-package="ru.lunchvoter.**.web"/>
 </beans>

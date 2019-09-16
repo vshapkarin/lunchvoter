@@ -6,7 +6,8 @@ import ru.lunchvoter.AbstractServiceAndRepositoryTest;
 import ru.lunchvoter.data.RestaurantTestData;
 import ru.lunchvoter.model.Position;
 import ru.lunchvoter.model.Restaurant;
-import ru.lunchvoter.repository.restaurant.RestaurantRepository;
+import ru.lunchvoter.repository.restaurant.RestaurantRepositoryImpl;
+import ru.lunchvoter.util.exception.NotFoundException;
 
 import static ru.lunchvoter.data.PositionTestData.*;
 
@@ -14,10 +15,10 @@ class PositionServiceTest extends AbstractServiceAndRepositoryTest {
 
     private final PositionService positionService;
 
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantRepositoryImpl restaurantRepository;
 
     @Autowired
-    PositionServiceTest(PositionService positionService, RestaurantRepository restaurantRepository) {
+    PositionServiceTest(PositionService positionService, RestaurantRepositoryImpl restaurantRepository) {
         this.positionService = positionService;
         this.restaurantRepository = restaurantRepository;
     }
@@ -34,6 +35,6 @@ class PositionServiceTest extends AbstractServiceAndRepositoryTest {
     void updateWrongRestaurant() {
         validateRootCause(
                 () ->  positionService.update(new Restaurant(0, "Dummy"), DATE, getMenu()),
-                IllegalArgumentException.class);
+                NotFoundException.class);
     }
 }

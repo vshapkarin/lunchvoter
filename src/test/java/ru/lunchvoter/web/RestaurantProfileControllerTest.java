@@ -1,13 +1,11 @@
 package ru.lunchvoter.web;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.lunchvoter.data.PositionTestData;
 import ru.lunchvoter.data.VoteTestData;
 import ru.lunchvoter.model.Restaurant;
-import ru.lunchvoter.repository.vote.VoteRepository;
 import ru.lunchvoter.util.RestaurantUtil;
 import ru.lunchvoter.util.exception.ErrorType;
 import ru.lunchvoter.web.restaurant.RestaurantProfileController;
@@ -20,15 +18,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.lunchvoter.TestUtil.userHttpBasic;
 import static ru.lunchvoter.data.PositionTestData.DATE;
-import static ru.lunchvoter.data.RestaurantTestData.contentJson;
 import static ru.lunchvoter.data.RestaurantTestData.*;
-import static ru.lunchvoter.data.UserTestData.*;
-import static ru.lunchvoter.data.VoteTestData.NEW_VOTE2;
+import static ru.lunchvoter.data.UserTestData.USER1;
+import static ru.lunchvoter.data.UserTestData.USER2;
+import static ru.lunchvoter.data.VoteTestData.NEW_VOTE2_TO;
 
 class RestaurantProfileControllerTest extends AbstractControllerTest {
-
-    @Autowired
-    private VoteRepository repository;
 
     private static final String REST_URL = RestaurantProfileController.REST_URL + '/';
 
@@ -76,9 +71,7 @@ class RestaurantProfileControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VoteTestData.contentJson(NEW_VOTE2));
-
-        VoteTestData.assertMatch(repository.getByUserIdAndDate(USER_ID + 1, DATE).orElse(null), NEW_VOTE2);
+                .andExpect(VoteTestData.contentJson(NEW_VOTE2_TO));
     }
 
     @Test

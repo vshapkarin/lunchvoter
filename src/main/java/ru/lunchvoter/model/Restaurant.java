@@ -1,5 +1,6 @@
 package ru.lunchvoter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Filter;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Restaurant extends AbstractEntity<Integer> {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @Filter(name = "filterByDate", condition = "date = :date")
+    @JsonIgnoreProperties("restaurant")
     private Set<Position> positions;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.lunchvoter.AbstractServiceAndRepositoryTest;
 import ru.lunchvoter.model.User;
+import ru.lunchvoter.util.exception.NotFoundException;
 
 import static ru.lunchvoter.data.UserTestData.*;
 
@@ -49,16 +50,16 @@ class UserServiceTest extends AbstractServiceAndRepositoryTest {
 
     @Test
     void deleteNotFound() {
-        validateRootCause(() -> service.delete(0), IllegalArgumentException.class);
+        validateRootCause(() -> service.delete(0), NotFoundException.class);
     }
 
     @Test
     void getNotFound() {
-        validateRootCause(() -> service.get(0), IllegalArgumentException.class);
+        validateRootCause(() -> service.get(0), NotFoundException.class);
     }
 
     @Test
     void getByEmailNotFound() {
-        validateRootCause(() -> service.getByEmail("dummy@mail.it"), IllegalArgumentException.class);
+        validateRootCause(() -> service.getByEmail("dummy@mail.it"), NotFoundException.class);
     }
 }

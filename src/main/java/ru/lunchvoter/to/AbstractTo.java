@@ -2,23 +2,23 @@ package ru.lunchvoter.to;
 
 import ru.lunchvoter.HasId;
 
-public class AbstractTo implements HasId<Integer> {
-    protected Integer id;
+public class AbstractTo<T> implements HasId<T> {
+    protected T id;
 
     public AbstractTo() {
     }
 
-    public AbstractTo(Integer id) {
+    public AbstractTo(T id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public T getId() {
         return id;
     }
 
     @Override
-    public void setId(Integer id) {
+    public void setId(T id) {
         this.id = id;
     }
 }

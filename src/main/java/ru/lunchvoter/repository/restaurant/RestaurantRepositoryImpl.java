@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class RestaurantRepositoryImpl implements RestaurantRepository {
+public class RestaurantRepositoryImpl {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -25,23 +25,19 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
         this.jpaRepository = jpaRepository;
     }
 
-    @Override
     public Restaurant save(Restaurant restaurant) {
         return jpaRepository.save(restaurant);
     }
 
-    @Override
-    public boolean delete(int id) {
-        return jpaRepository.delete(id) != 0;
+    public int delete(int id) {
+        return jpaRepository.delete(id);
     }
 
-    @Override
     public Optional<Restaurant> get(int id) {
         return jpaRepository.findById(id);
     }
 
     //https://stackoverflow.com/a/27369964/12015598
-    @Override
     @Transactional
     public Optional<Restaurant> getWithPositionsByDate(int id, LocalDate date) {
         entityManager.unwrap(Session.class)
@@ -54,7 +50,6 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
                 .findFirst();
     }
 
-    @Override
     public List<Restaurant> getAll() {
         return jpaRepository.findAll();
     }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lunchvoter.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
@@ -18,4 +19,8 @@ public interface UserJpaRepository extends JpaRepository<User, Integer> {
     int delete(@Param("id") int id);
 
     Optional<User> findByEmail(String email);
+
+    Optional<User> findById(int id);
+
+    List<User> findAll();
 }

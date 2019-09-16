@@ -6,18 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.lunchvoter.model.Restaurant;
-import ru.lunchvoter.repository.restaurant.RestaurantRepository;
+import ru.lunchvoter.repository.restaurant.RestaurantRepositoryImpl;
 import ru.lunchvoter.service.PositionService;
 import ru.lunchvoter.to.RestaurantTo;
 import ru.lunchvoter.util.RestaurantUtil;
 import ru.lunchvoter.util.ValidationUtil;
+import ru.lunchvoter.util.exception.NotFoundException;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 import static ru.lunchvoter.web.restaurant.RestaurantAdminController.REST_URL;
 
@@ -29,15 +30,23 @@ public class RestaurantAdminController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantRepositoryImpl restaurantRepository;
 
     private final PositionService positionService;
 
     @Autowired
-    public RestaurantAdminController(RestaurantRepository restaurantRepository,
+    public RestaurantAdminController(RestaurantRepositoryImpl restaurantRepository,
                                      PositionService positionService) {
         this.restaurantRepository = restaurantRepository;
         this.positionService = positionService;
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Restaurant getByDate(@PathVariable int id,
+                                @RequestParam LocalDate date) {
+        log.info("get restaurant with id = {} and menu date = {}", id, date);
+        return restaurantRepository.getWithPositionsByDate(id, date)
+                .orElseThrow(() -> new NotFoundException("Restaurant with id = " + id + " doesn't exist"));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -56,7 +65,9 @@ public class RestaurantAdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant with id = {}", id);
-        Assert.isTrue(restaurantRepository.delete(id), "Restaurant with id = " + id + " doesn't exist");
+        if (restaurantRepository.delete(id) == 0) {
+            throw new NotFoundException("Restaurant with id = " + id + " doesn't exist");
+        }
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -68,7 +79,7 @@ public class RestaurantAdminController {
         restaurantRepository.save(RestaurantUtil.getFromTo(restaurantTo));
     }
 
-    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateMenu(@Validated(RestaurantTo.MenuValidation.class) @RequestBody RestaurantTo restaurantTo,
                            @PathVariable int id) {

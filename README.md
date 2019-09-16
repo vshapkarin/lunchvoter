@@ -19,11 +19,13 @@
 * Искать пользователей по id или email
 * Создавать/изменять/удалять пользователей
 * Создавать/изменять/удалять рестораны
+* Смотреть рестораны с меню по id и дате
 * Изменять меню ресторанов
 ## Запуск 
-Приложение доступно по адресу [https://lunchvoter.herokuapp.com](https://lunchvoter.herokuapp.com)
+Приложение доступно по адресу [https://lunchvoter.herokuapp.com](https://lunchvoter.herokuapp.com)  
+(Приложение работает по серверному времени UTC+0)
 
-Для локального тестирования:
+Для локального тестирования (необходимо JRE 11+ и Maven в системной переменной Path):
 1. Клонируйте репозиторий
 2. В папке проекта запустите в терминале `lunchvoter.bat`
 3. Сервер доступен по адресу [http://localhost:8080](http://localhost:8080)
@@ -33,7 +35,7 @@
 * Пользователи: `johnycowboy@email.com:password`, `builderbob@email.com:password`, `chrstn@email.com:password`
 * Админ: `admin@email.com:admin`
 ## Конечные точки и примеры запросов
-Доступны на [Postman](https://documenter.getpostman.com/view/8691721/SVfWKQcj)
+Доступны на [Postman](https://documenter.getpostman.com/view/8691721/SVmtzfk3)
 ## Используемые технологии
 *	База данных: HSQLDB
 *	ORM: JPA (Hibernate)

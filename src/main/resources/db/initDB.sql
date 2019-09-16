@@ -59,5 +59,5 @@ CREATE TABLE menu_positions
   price             INTEGER                      NOT NULL,
   FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
-CREATE INDEX menu_positions_idx
-    ON menu_positions (date, restaurant_id)
+CREATE UNIQUE INDEX menu_positions_idx
+    ON menu_positions (date, restaurant_id, name)

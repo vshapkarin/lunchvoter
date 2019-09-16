@@ -18,7 +18,7 @@ public class PositionTestData {
     public static final Position POSITION2 = new Position(POSITION_ID + 1, DATE, "Hario V60", 300, RestaurantTestData.RESTAURANT1);
     public static final Position POSITION3 = new Position(POSITION_ID + 2, DATE, "Almond croissant", 200, RestaurantTestData.RESTAURANT1);
 
-    public static final Position UPDATED_POSITION = new Position(POSITION_ID + 13, DATE, "TestPosition1", 100, RestaurantTestData.RESTAURANT1);
+    public static final Position UPDATED_POSITION = new Position(POSITION_ID + 10, DATE, "TestPosition1", 100, RestaurantTestData.RESTAURANT1);
 
     public static Map<String, Integer> getMenu() {
         return Map.of("TestPosition1", 100);

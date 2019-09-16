@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.lunchvoter.AbstractServiceAndRepositoryTest;
 import ru.lunchvoter.data.RestaurantTestData;
 import ru.lunchvoter.util.TimeUtil;
-import ru.lunchvoter.util.VoteWrapper;
+import ru.lunchvoter.to.VoteTo;
+import ru.lunchvoter.util.exception.NotFoundException;
 
 import java.time.LocalTime;
 
@@ -25,29 +26,36 @@ class VoteServiceTest extends AbstractServiceAndRepositoryTest {
 
     @Test
     void vote() {
-        VoteWrapper saved = service.vote(USER2, RestaurantTestData.RESTAURANT_ID, DATE, TimeUtil.CHANGE_MIND_TIME);
+        VoteTo saved = service.vote(USER2, RestaurantTestData.RESTAURANT_ID, DATE, TimeUtil.CHANGE_MIND_TIME);
         Assertions.assertThat(saved.isOld()).isEqualTo(false);
-        assertMatch(saved.getVote(), NEW_VOTE2);
+        assertMatch(saved, NEW_VOTE2_TO);
     }
 
     @Test
     void voteAgainBeforeChangeMindTime() {
-        VoteWrapper saved = service.vote(USER1, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MAX);
+        VoteTo saved = service.vote(USER1, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MAX);
         Assertions.assertThat(saved.isOld()).isEqualTo(false);
-        assertMatch(saved.getVote(), NEW_VOTE1);
+        assertMatch(saved, NEW_VOTE1_TO);
     }
 
     @Test
     void voteAgainAfterChangeMindTime() {
-        VoteWrapper saved = service.vote(USER1, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MIN);
+        VoteTo saved = service.vote(USER1, RestaurantTestData.RESTAURANT_ID, DATE, LocalTime.MIN);
         Assertions.assertThat(saved.isOld()).isEqualTo(true);
-        assertMatch(saved.getVote(), OLD_VOTE);
+        assertMatch(saved, OLD_VOTE_TO);
     }
 
     @Test
     void voteWrongRestaurant() {
         validateRootCause(
                 () -> service.vote(USER2, 0, DATE, TimeUtil.CHANGE_MIND_TIME),
-                IllegalArgumentException.class);
+                NotFoundException.class);
+    }
+
+    @Test
+    void voteEmptyMenu() {
+        validateRootCause(
+                () -> service.vote(USER2, RestaurantTestData.RESTAURANT_ID + 2, DATE, TimeUtil.CHANGE_MIND_TIME),
+                NotFoundException.class);
     }
 }

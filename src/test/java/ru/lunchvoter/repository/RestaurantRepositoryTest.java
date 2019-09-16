@@ -7,16 +7,16 @@ import ru.lunchvoter.AbstractServiceAndRepositoryTest;
 import ru.lunchvoter.data.PositionTestData;
 import ru.lunchvoter.data.RestaurantTestData;
 import ru.lunchvoter.model.Restaurant;
-import ru.lunchvoter.repository.restaurant.RestaurantRepository;
+import ru.lunchvoter.repository.restaurant.RestaurantRepositoryImpl;
 
 import static ru.lunchvoter.data.RestaurantTestData.*;
 
 class RestaurantRepositoryTest extends AbstractServiceAndRepositoryTest {
 
-    private final RestaurantRepository repository;
+    private final RestaurantRepositoryImpl repository;
 
     @Autowired
-    RestaurantRepositoryTest(RestaurantRepository repository) {
+    RestaurantRepositoryTest(RestaurantRepositoryImpl repository) {
         this.repository = repository;
     }
 
@@ -30,7 +30,7 @@ class RestaurantRepositoryTest extends AbstractServiceAndRepositoryTest {
 
     @Test
     void delete() {
-        Assertions.assertThat(repository.delete(RESTAURANT_ID)).isEqualTo(true);
+        Assertions.assertThat(repository.delete(RESTAURANT_ID)).isEqualTo(1);
         assertMatch(repository.getAll(), RESTAURANT2, RESTAURANT3, RESTAURANT4);
     }
 
@@ -57,7 +57,7 @@ class RestaurantRepositoryTest extends AbstractServiceAndRepositoryTest {
 
     @Test
     void deleteNotFound() {
-        Assertions.assertThat(repository.delete(RESTAURANT_ID + 10)).isEqualTo(false);
+        Assertions.assertThat(repository.delete(RESTAURANT_ID + 10)).isEqualTo(0);
         assertMatch(repository.getAll(), RESTAURANTS);
     }
 
