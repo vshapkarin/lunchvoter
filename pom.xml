@@ -40,7 +40,7 @@
         <slf4j.version>1.7.25</slf4j.version>
 
         <!--Other-->
-        <jackson-json.version>2.9.9</jackson-json.version>
+        <jackson-json.version>2.10.1</jackson-json.version>
         <tomcat.version>9.0.21</tomcat.version>
     </properties>
 
